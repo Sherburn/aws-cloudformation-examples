@@ -1,0 +1,13 @@
+{
+    "AWSEBDockerrunVersion": "1",
+    "Image": {
+        "Name": "public.ecr.aws/u5s1n4m2/james-sherburn-f1-example-api:latest",
+        "Update": "true"
+    },
+    "Ports": [
+        {
+            "HostPort": "8080",
+            "ContainerPort": "80"
+        }
+    ]
+}
