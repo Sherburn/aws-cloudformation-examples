@@ -1,0 +1,28 @@
+---
+AWSTemplateFormatVersion: "2010-09-09"
+
+Parameters:
+  UserPoolName:
+    Type: String
+    Description: The name of your Cognito User Pool.
+
+  UserPoolClientName:
+    Type: String
+    Description: The name of your Cognito User Pool client.
+
+Resources:
+  UserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: !Ref UserPoolName
+      AliasAttributes:
+        - email
+      AutoVerifiedAttributes:
+        - email
+
+  UserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      ClientName: !Ref UserPoolClientName
+      UserPoolId: !Ref UserPool
+      GenerateSecret: false

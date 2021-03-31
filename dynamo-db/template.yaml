@@ -1,0 +1,56 @@
+---
+AWSTemplateFormatVersion: "2010-09-09"
+
+Parameters:
+  TableName:
+    Type: String
+    Description: Table Name.
+
+  PartitionKey:
+    Type: String
+      Description: Partition Key
+
+  PartitionKeyType:
+    Type: String
+      Description: Partition Key Type, For Example, String
+
+Resources:
+  DynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Ref TableName
+      AttributeDefinitions: 
+        - 
+          AttributeName: !Ref PartitionKey
+          AttributeType: !Ref PartitionKeyType
+        - 
+          AttributeName: "Other"
+          AttributeType: "S"
+      KeySchema: 
+        - 
+          AttributeName: !Ref PartitionKey
+          KeyType: "HASH"
+        - 
+          AttributeName: "Other"
+          KeyType: "RANGE"
+  
+  LambdaDynamoDBRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Policies:
+        - PolicyName: DynamoDB
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action: "amplify:*"
+                Resource: "*"
