@@ -1,0 +1,30 @@
+Parameters:
+  SSHKey:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: Name of an existing EC2 KeyPair to enable SSH access to the instance
+
+Resources:
+  EC2ContainerServiceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: SSH and HTTP
+      SecurityGroupIngress:
+        - CidrIp: 0.0.0.0/0
+          FromPort: 22
+          IpProtocol: tcp
+          ToPort: 22
+        - CidrIp: 0.0.0.0/0
+          FromPort: 80
+          IpProtocol: tcp
+          ToPort: 80
+
+  EC2ContainerServiceStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: PassURL
+      Parameters:
+        SSHKey: !Ref SSHKey
+        SecurityGroup: !Ref "EC2ContainerServiceSecurityGroup"
+        DockerImageName: "nginx"
+        ContainerPort: "80"
+        HostPort: "80"

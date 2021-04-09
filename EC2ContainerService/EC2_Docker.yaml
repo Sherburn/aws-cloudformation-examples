@@ -1,0 +1,42 @@
+---
+Parameters:
+  LatestAmiId:
+    Type: "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>"
+    Default: "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"
+  InstanceType:
+    Type: String
+    Default: "t2.micro"
+  SSHKey:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: Name of an existing EC2 KeyPair to enable SSH access to the instance
+  SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Description: The Security Group that should be attached to the EC2 instance.
+  DockerImageName:
+    Description: Name of the Docker image that you wish to run.
+    Type: String
+  ContainerPort:
+    Description: The TCP port in the container you wish to map to the HostPort.
+    Type: String
+  HostPort:
+    Description: The host port that you wish to expose.
+    Type: String
+
+Resources:
+  MyInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref "LatestAmiId"
+      InstanceType: !Ref "InstanceType"
+      KeyName: !Ref SSHKey
+      SecurityGroups:
+        - !Ref SecurityGroup
+      # Pre-configure Docker and run the container.
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash -xe
+          sudo yum update -y
+          sudo amazon-linux-extras install docker -y
+          sudo service docker start
+          sudo docker run -d -p ${HostPort}:${ContainerPort} --name ${DockerImageName} ${DockerImageName}
+          sudo usermod -a -G docker ec2-user
