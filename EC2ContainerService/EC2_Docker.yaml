@@ -9,9 +9,9 @@ Parameters:
   SSHKey:
     Type: AWS::EC2::KeyPair::KeyName
     Description: Name of an existing EC2 KeyPair to enable SSH access to the instance
-  SecurityGroup:
-    Type: AWS::EC2::SecurityGroup
-    Description: The Security Group that should be attached to the EC2 instance.
+  SecurityGroupId:
+    Type: AWS::EC2::SecurityGroup::Id
+    Description: The ID of the Security Group that should be attached to the EC2 instance.
   DockerImageName:
     Description: Name of the Docker image that you wish to run.
     Type: String
@@ -29,8 +29,8 @@ Resources:
       ImageId: !Ref "LatestAmiId"
       InstanceType: !Ref "InstanceType"
       KeyName: !Ref SSHKey
-      SecurityGroups:
-        - !Ref SecurityGroup
+      SecurityGroupIds:
+        - !Ref SecurityGroupId
       # Pre-configure Docker and run the container.
       UserData:
         Fn::Base64: !Sub |

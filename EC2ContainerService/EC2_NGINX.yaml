@@ -21,10 +21,10 @@ Resources:
   EC2ContainerServiceStack:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: <Replace with S3 URL to EC2_Docker.yaml template>
+      TemplateURL: <Replace with your own S3 URL to the EC2_Docker.yaml template>
       Parameters:
         SSHKey: !Ref SSHKey
-        SecurityGroup: !Ref "EC2ContainerServiceSecurityGroup"
+        SecurityGroupId: !GetAtt EC2ContainerServiceSecurityGroup.GroupId
         DockerImageName: "nginx"
         ContainerPort: "80"
         HostPort: "80"
