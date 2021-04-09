@@ -21,7 +21,7 @@ Resources:
   EC2ContainerServiceStack:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://raw.githubusercontent.com/Sherburn/aws-cloudformation-examples/master/EC2ContainerService/EC2_Docker.yaml
+      TemplateURL: <Replace with S3 URL to EC2_Docker.yaml template>
       Parameters:
         SSHKey: !Ref SSHKey
         SecurityGroup: !Ref "EC2ContainerServiceSecurityGroup"
